@@ -10,10 +10,10 @@ import {
   SearchFillIcon,
   SearchIcon,
 } from "./ui/icons";
-import SignInButton from "./SignInButton";
 import { signIn, signOut, useSession } from "next-auth/react";
 import ColorButton from "./ui/ColorButton";
 import Image from "next/image";
+import Avatar from "./Avatar";
 
 const menu = [
   {
@@ -39,7 +39,7 @@ const menu = [
 const Navbar = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
-  console.log({ session });
+  const user = session?.user;
 
   return (
     <div className="flex flex-row items-center justify-between px-6">
@@ -55,9 +55,14 @@ const Navbar = () => {
               </Link>
             </li>
           ))}
-          {/* {session && (
-            <Image src={session?.user?.image || ""} alt="profile image" width={7} height={7} />
-          )} */}
+          {user && (
+            <li>
+              <Link href={`/user/${user?.username}`}>
+                <Avatar image={user.image} />
+              </Link>
+            </li>
+          )}
+
           {session ? (
             <ColorButton text="Sign out" onClick={() => signOut()} />
           ) : (
